@@ -12,6 +12,28 @@ export default class App extends Component {
     };
   }
 
+  handleChangeSymbol(symbol) {
+    this.setState({ symbol }, this.updateStockData);
+  }
+
+  handleClickRange(range) {
+    this.setState({ range }, this.updateStockData);
+  }
+
+  async updateStockData() {
+    const { symbol, range } = this.state;
+    if (!symbol || !range) {
+      return;
+    }
+
+    try {
+      const stockData = await fetchData(symbol, range);
+      this.setState({ stockData });
+    } catch (err) {
+      console.error("Could not fetch stock data: ", err);
+    }
+  }
+
   render() {
     const { symbol, range, stockData } = this.state;
     return (
